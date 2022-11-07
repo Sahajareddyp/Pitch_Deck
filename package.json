@@ -1,0 +1,25 @@
+{
+  "name": "final-project-proposal-uchiha",
+  "version": "1.0.0",
+  "description": "final-project-proposal-uchiha created by GitHub Classroom",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js",
+    "build": "cd frontend && npm install && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckclassrooms/final-project-proposal-uchiha.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ckclassrooms/final-project-proposal-uchiha/issues"
+  },
+  "homepage": "https://github.com/ckclassrooms/final-project-proposal-uchiha#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

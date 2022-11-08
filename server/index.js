@@ -3,7 +3,7 @@ const express = require("express");
 const PORT = process.env.PORT || 3001;
 
 const app = express();
-
+console.log(__dirname);
 let publicRoot = __dirname + "/../frontend/build";
 
 app.use(express.static(publicRoot));

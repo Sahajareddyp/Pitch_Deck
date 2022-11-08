@@ -19,7 +19,7 @@ The investment will proceed only if the idea has the potential to get a certain 
 
 The privacy of the investor is something critical in this application as we do not want the founder to contact the investor until certain number of investors are ready to invest in the idea/ project.
 
-4) Link to Deployed app: https://pitchdec.herokuapp.com/ <br>
+4) Link to Deployed app: https://pitchdeck.onrender.com/ <br>
 
 
 5) Flow chart of the application:

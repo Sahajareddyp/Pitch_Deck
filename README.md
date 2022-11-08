@@ -24,8 +24,9 @@ The privacy of the investor is something critical in this application as we do n
 
 5) Flow chart of the application:
 
-  ![](Flow chart.png)
-
+![](Flow_chart.png)
+ 
+ 
 - What services you will use to host (front end, back end, database) <br>
 We will be using all the three services-frontend, backend, database to host our application.
 

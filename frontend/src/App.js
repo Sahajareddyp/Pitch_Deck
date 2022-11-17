@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import NavigationBar from './components/common/NavigationBar';
+import Login from './components/Login';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         </a>
       </header> */}
     <NavigationBar/>
+    <Login/>
     </div>
     
   );

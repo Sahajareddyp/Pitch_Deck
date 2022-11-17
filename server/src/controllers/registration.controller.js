@@ -4,7 +4,7 @@ const { supabase } = require("../supabaseClient");
 const registerNewUser = async (req, res) => {
   console.log(req.body);
   bcrypt.hash(req.body.password, 10, async (err, hash) => {
-    console.log(hash);
+    // console.log(hash);
     const { data, error } = await supabase
       .from("user")
       .insert([{ ...req.body, password: hash }]);

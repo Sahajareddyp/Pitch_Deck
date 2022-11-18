@@ -2,22 +2,27 @@ const bcrypt = require("bcrypt");
 const { supabase } = require("../supabaseClient");
 
 const loginUser = async (req, res) => {
-  const { user, session, error } = await supabase.auth.signInWithPassword({
+  const user = await supabase.auth.signInWithPassword({
     email: req.body.email,
     password: req.body.password,
   });
   console.log("Signed IN");
   console.log(user);
-  console.log(error);
-  console.log(session);
+  console.log(user.error);
   console.log("Signed IN Done");
-  if (error) {
+  if (user.error) {
     res.status(500).send({ message: "Invalid Email/Password" });
   } else {
-    res.status(200).send(user);
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    res
+      .status(200)
+      .send({
+        message: "logged In successfully",
+        session: user.data.session,
+        user: user.data.user,
+      });
+    supabase.auth.getSession().then((data) => {
       console.log("Inside first");
-      console.log(session);
+      console.log(data);
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {

@@ -26,7 +26,7 @@ export default function Dashboard() {
 
   const getUser = () => {
     axios
-      .get(`/api/userDetails/${email}`)
+      .get(`/api/userDetails/${email}/${session}`)
       .then((response) => {
         console.log(response);
         setLoggedInUser(response.data.data[0]);

@@ -67,7 +67,7 @@ export default function Login() {
       .then((response) => {
         console.log(response);
         setEmail(credential.email);
-        setSession(true);
+        setSession(response.data.session.access_token);
         navigate("/");
       })
       .catch((err) => {

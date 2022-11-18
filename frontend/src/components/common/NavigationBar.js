@@ -65,7 +65,7 @@ export default function NavigationBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Pitch Deck
           </Typography>
-          {session ? (
+          {!session ? (
             <Button color="inherit" onClick={handleLogin}>
               Login
             </Button>

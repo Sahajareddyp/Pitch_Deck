@@ -1,12 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
-import NavigationBar from './components/common/NavigationBar';
-import Login from './components/Login';
+import logo from "./logo.svg";
+import "./App.css";
+import NavigationBar from "./components/common/NavigationBar";
+import Login from "./components/Login";
+import ToastContextProvider from "./contexts/ToastContext";
+import UserContextProvider from "./contexts/UserContext";
+import Toast from "./components/common/Toast";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./components/DashBoard";
 
 function App() {
   return (
-    <div className="App">
-      {/* <header className="App-header">
+    <UserContextProvider>
+      <ToastContextProvider>
+        <div className="App">
+          {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -20,10 +27,19 @@ function App() {
           Learn React
         </a>
       </header> */}
-    <NavigationBar/>
-    <Login/>
-    </div>
-    
+          {/* <Login /> */}
+          <Router>
+            <Routes>
+              <Route>
+                <Route exact path="/login" element={<Login />} />
+                <Route path="/" element={<Dashboard />} />
+              </Route>
+            </Routes>
+          </Router>
+          <Toast />
+        </div>
+      </ToastContextProvider>
+    </UserContextProvider>
   );
 }
 

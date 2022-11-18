@@ -4,6 +4,8 @@ const PORT = process.env.PORT || 3001;
 
 //routes
 const registrationRoutes = require('./src/routes/registration.route');
+const loginRoutes = require('./src/routes/login.route');
+const userRoutes = require('./src/routes/user.route');
 
 const app = express();
 console.log(__dirname);
@@ -18,6 +20,9 @@ app.get("/", (req, res, next) => {
   });
 
 registrationRoutes(app);
+loginRoutes(app);
+userRoutes(app);
+
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });

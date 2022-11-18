@@ -14,6 +14,11 @@ import {
 } from "@mui/material";
 import roles from "../assets/json/roles.json";
 import axios from "axios";
+import { ToastContext } from "../contexts/ToastContext";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function Registration(props) {
   const [newUser, setNewUser] = React.useState({
@@ -31,6 +36,16 @@ export default function Registration(props) {
       width: "90%",
     },
   };
+  const navigate = useNavigate();
+
+  const {
+    openToast,
+    setOpenToast,
+    toastContent,
+    setToastContent,
+    severity,
+    setSeverity
+  } = useContext(ToastContext);
 
   const handleChange = (event, property) => {
     setNewUser({ ...newUser, [property]: event.target.value });
@@ -38,7 +53,16 @@ export default function Registration(props) {
 
   const onSignUpClick = () => {
     axios.post("/api/registerUser", newUser).then((response) => {
-      console.log(response);
+      setOpenToast(true);
+      setSeverity("success");
+      setToastContent(response.data.message);
+      props.closeRegistrationDialog();
+      navigate("/")
+    }).catch((err) => {
+      setOpenToast(true);
+      setSeverity("error");
+      setToastContent(err.response.data.message);
+      props.closeRegistrationDialog();
     });
   };
   return (
@@ -103,6 +127,7 @@ export default function Registration(props) {
             label="Password"
             style={styles.textField}
             value={newUser.password}
+            type="password"
             onChange={(e) => handleChange(e, "password")}
           />
         </Box>

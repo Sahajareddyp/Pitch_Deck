@@ -3,6 +3,10 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { Button, Link, TextField } from "@mui/material";
 import Registration from "./Registration";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
+import { ToastContext } from "../contexts/ToastContext";
 
 export default function Login() {
   const styles = {
@@ -22,6 +26,28 @@ export default function Login() {
   };
 
   const [openRegistration, setOpenRegistration] = React.useState(false);
+  const [credential, setCredentials] = React.useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  const {
+    email,
+    setEmail,
+    session,
+    setSession,
+    loggedInUser,
+    setLoggedInUser,
+  } = React.useContext(UserContext);
+
+  const {
+    openToast,
+    setOpenToast,
+    toastContent,
+    setToastContent,
+    severity,
+    setSeverity
+  } = React.useContext(ToastContext);
 
   const openDialog = () => {
     setOpenRegistration(true);
@@ -30,18 +56,54 @@ export default function Login() {
   const closeRegistrationDialog = () => {
     setOpenRegistration(false);
   };
+
+  const textChangeHandler = (event, prop) => {
+    setCredentials({ ...credential, [prop]: event.target.value });
+  };
+
+  const handleSignIn = () => {
+    axios
+      .post("/api/login", credential)
+      .then((response) => {
+        console.log(response);
+        setEmail(credential.email);
+        setSession(true);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+        setOpenToast(true);
+        setSeverity("error");
+        setToastContent(err.response.data.message);
+      });
+  };
   return (
     <Box style={styles.box}>
       <Container style={styles.container} maxWidth="sm">
-        <TextField required id="outlined-required" label="Email" fullWidth />
+        <TextField
+          required
+          id="outlined-required"
+          label="Email"
+          fullWidth
+          value={credential.email}
+          onChange={(e) => textChangeHandler(e, "email")}
+        />
         <br />
         <br />
         <br />
-        <TextField required id="outlined-required" label="Password" fullWidth />
+        <TextField
+          required
+          id="outlined-required"
+          label="Password"
+          fullWidth
+          value={credential.password}
+          type="password"
+          onChange={(e) => textChangeHandler(e, "password")}
+        />
         <br />
         <br />
         <br />
-        <Button variant="contained" fullWidth>
+        <Button variant="contained" fullWidth onClick={handleSignIn}>
           Sign In
         </Button>
         <div style={styles.footerLinksDiv}>

@@ -68,6 +68,7 @@ export default function Login() {
         console.log(response);
         setEmail(credential.email);
         setSession(response.data.session.access_token);
+        window.sessionStorage.setItem("sessionKey", response.data.session.access_token);
         navigate("/");
       })
       .catch((err) => {
@@ -77,6 +78,12 @@ export default function Login() {
         setToastContent(err.response.data.message);
       });
   };
+
+  React.useEffect(() => {
+    if(sessionStorage.getItem("sessionKey")){
+      navigate("/");
+    }
+  }, [])
   return (
     <Box style={styles.box}>
       <Container style={styles.container} maxWidth="sm">

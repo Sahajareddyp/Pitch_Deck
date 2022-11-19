@@ -47,20 +47,26 @@ export default function Dashboard() {
   const [selectedPitch, setSelectedPitch] = React.useState(null);
 
   React.useEffect(() => {
-    if (session) {
-      getUser();
+    const activeSession = window.sessionStorage.getItem("sessionKey");
+    if (activeSession) {
+      setSession(activeSession);
+      getUser(activeSession);
     } else {
       navigate("/login");
     }
   }, []);
 
-  const getUser = () => {
+  const getUser = (activeSession) => {
     axios
-      .get(`/api/userDetails/${email}/${session}`)
+      .get(`/api/userDetails/${activeSession}`)
       .then((response) => {
-        console.log(response);
-        setLoggedInUser(response.data.data[0]);
-        getAllPitch();
+        const user = response.data.data[0];
+        setLoggedInUser(user);
+        if (user.roleid == 2) {
+          getPitchByUser(user.id);
+        } else {
+          getAllPitch();
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -70,6 +76,17 @@ export default function Dashboard() {
   const getAllPitch = () => {
     axios
       .get("/api/getAllPitch")
+      .then((response) => {
+        setAllPitch(response.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getPitchByUser = (userId) => {
+    axios
+      .get(`/api/getPitchByUser/${userId}`)
       .then((response) => {
         setAllPitch(response.data.data);
       })
@@ -91,21 +108,31 @@ export default function Dashboard() {
     setOpenDetails(true);
   };
 
-  const closePitchDetailModal = () => {
+  const closePitchDetailModal = (e,wasDataUpdated = false) => {
     setOpenDetails(false);
     setSelectedPitch(null);
+    if (wasDataUpdated) {
+      getPitchByUser(loggedInUser.id);
+    }
   };
+
   return (
     <Box>
       <NavigationBar />
       <Container maxWidth="lg" style={styles.containerStyle}>
-        <Button variant="contained" onClick={openNewPitchModal}>
-          New Idea
-        </Button>
+        {loggedInUser.roleid != 3 && (
+          <Button style={{float: "right", margin: "5px"}} variant="contained" onClick={openNewPitchModal}>
+            Create Pitch
+          </Button>
+        )}
         <Container maxWidth="lg" style={styles.cardContianerStyle}>
           {allPitch.map((pitch) => {
             return (
-              <Card sx={{ maxWidth: 150 }} style={styles.cardStyle}>
+              <Card
+                sx={{ maxWidth: 150 }}
+                style={styles.cardStyle}
+                key={pitch.idea_id}
+              >
                 <CardContent>
                   <Typography
                     sx={{ fontSize: 14 }}
@@ -141,6 +168,7 @@ export default function Dashboard() {
         openDetail={openDetail}
         closePitchDetailModal={closePitchDetailModal}
         pitch={selectedPitch}
+        userRole={loggedInUser.roleid}
       />
     </Box>
   );

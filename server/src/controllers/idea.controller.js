@@ -37,4 +37,50 @@ const getAllPitch = async (req, res) => {
   }
 };
 
-module.exports = { createNewPitch, getAllPitch };
+const getPitchByUser = async (req, res) => {
+  let { data: ideas, error } = await supabase
+    .from("idea-user")
+    .select("*")
+    .eq("userId", req.params.userId);
+
+  console.log(ideas);
+
+  if (error) {
+    res
+      .status(500)
+      .send({ message: "Could not fetch Data. Please try again later" });
+  } else {
+    const ideaIds = ideas.map((i) => i.ideaId);
+    let { data: idea, error } = await supabase
+      .from("idea")
+      .select("*")
+      .in("idea_id", ideaIds);
+
+    if (error) {
+      res
+        .status(500)
+        .send({ message: "Could not fetch Data. Please try again later" });
+    } else {
+      res
+        .status(200)
+        .send({ message: "Successfully fetched data", data: idea });
+    }
+  }
+};
+
+const editPitch = async (req, res) => {
+  const { data, error } = await supabase
+    .from("idea")
+    .update(req.body.updatedPitch)
+    .eq("idea_id", req.body.updatedPitch.idea_id);
+
+  if (error) {
+    res
+      .status(500)
+      .send({ message: "Could not update the pitch. Please try again later." });
+  } else {
+    res.status(200).send({ message: "Succesfully Updated" });
+  }
+};
+
+module.exports = { createNewPitch, getAllPitch, getPitchByUser, editPitch };

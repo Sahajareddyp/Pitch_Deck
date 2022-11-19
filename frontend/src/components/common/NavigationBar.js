@@ -40,6 +40,7 @@ export default function NavigationBar() {
         setLoggedInUser({});
         setOpenToast(true);
         setSeverity("success");
+        window.sessionStorage.removeItem("sessionKey");
         setToastContent(response.data.message);
         navigate("/login");
       })

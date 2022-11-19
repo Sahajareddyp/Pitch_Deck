@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const { supabase } = require("../supabaseClient");
 
 const registerNewUser = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   // bcrypt.hash(req.body.password, 10, async (err, hash) => {
   //   // console.log(hash);
   //   // const { data, error } = await supabase
@@ -10,6 +10,12 @@ const registerNewUser = async (req, res) => {
   //   //   .insert([{ ...req.body, password: hash }]);
 
   // });
+  const existingUser = await supabase
+    .from("user")
+    .select("*")
+    .eq("email", req.body.emailId);
+
+  console.log(existingUser);
 
   const { data, error } = await supabase.auth.signUp({
     email: req.body.emailId,
@@ -29,7 +35,6 @@ const registerNewUser = async (req, res) => {
       .from("user")
       .update(userProfile)
       .eq("id", data.user.id);
-  
 
     if (registrationError) {
       res

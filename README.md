@@ -40,4 +40,23 @@ We will be using all the three services-frontend, backend, database to host our 
   2. APIs to hash the number of investors <br>
 
 6) Short textual description of MVP. <br>
- MVP will consist of frontend development of the pitcher, investor and the CRUD Operations. We will also try to implement Hash functionality
+ MVP will consist of frontend development of the pitcher, investor and the CRUD Operations. We will also try to implement Hash functionality<br>
+
+<br>
+ MVP:<br>
+ We have implemented the following functionalities:<br>
+1)User Sign Up.<br>
+2)User Log In.<br>
+3)Investor can view all Pitches (Ideas proposed by startups).<br>
+4)Pitchers can only view the pitch proposed by them.<br>
+5)Pitchers can create/edit their pitches.<br>
+
+
+<br>
+Pending Tasks for the Final:<br>
+1) Implement Accept functionality for Investor. When Investor accepts an idea, it should ideally encrypt their interest and
+decrypt it only when desired condition is met.<br>
+2) Implement ability to add collaborators to pitches.<br>
+3) Notification system.<br>
+4) Ability to add images, files for the pitches.<br>
+5) Styling.<br>

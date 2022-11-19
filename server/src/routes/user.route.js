@@ -3,7 +3,7 @@ const router = express.Router();
 const userController = require("../controllers/user.controller");
 
 const routes = (app) => {
-    router.get('/userDetails/:email/:session', userController.getUserDetails);
+    router.get('/userDetails/:session', userController.getUserDetails);
     app.use("/api",router);
 }
 

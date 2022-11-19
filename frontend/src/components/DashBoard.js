@@ -95,8 +95,11 @@ export default function Dashboard() {
       });
   };
 
-  const closeNewPitchModal = () => {
+  const closeNewPitchModal = (event, wasDataUpdated = false) => {
     setOpenNewPitch(false);
+    if (wasDataUpdated) {
+        getPitchByUser(loggedInUser.id);
+      }
   };
 
   const openNewPitchModal = () => {

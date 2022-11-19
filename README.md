@@ -45,7 +45,7 @@ We will be using all the three services-frontend, backend, database to host our 
 <br>
  MVP:<br>
  We have implemented the following functionalities:<br>
-1)User Sign Up.<br>
+1)User Sign Up. (User will have to login again after sign up)<br>
 2)User Log In.<br>
 3)Investor can view all Pitches (Ideas proposed by startups).<br>
 4)Pitchers can only view the pitch proposed by them.<br>

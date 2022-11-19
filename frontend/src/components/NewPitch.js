@@ -71,7 +71,7 @@ export default function NewPitch(props) {
       .post("/api/createNewPitch", reqBody)
       .then((response) => {
         console.log(response);
-        props.closeNewPitchModal();
+        props.closeNewPitchModal(null, true);
       })
       .catch((err) => {
         console.log(err);

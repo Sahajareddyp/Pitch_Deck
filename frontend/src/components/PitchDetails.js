@@ -12,12 +12,14 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { ToastContext } from "../contexts/ToastContext";
 import { UserContext } from "../contexts/UserContext";
+import Invest from "./Invest";
 
 export default function PitchDetails(props) {
   const [pitch, setPitch] = useState(props.pitch);
   //   const pitch = props.pitch;
   const [edit, setEdit] = useState(false);
   const [currentPitch, setCurrentPitch] = useState(props.pitch);
+  const [openInvestModal, setOpenInvestModal] = useState(false);
 
   useEffect(() => {
     setPitch(props.pitch);
@@ -75,9 +77,17 @@ export default function PitchDetails(props) {
         setToastContent(err.response.data.message);
       });
   };
+
+  const closeInvestModal = () => {
+    setOpenInvestModal(false);
+  }
   return (
     pitch && (
-      <Dialog open={props.openDetail} onClose={props.closePitchDetailModal} fullWidth>
+      <Dialog
+        open={props.openDetail}
+        onClose={props.closePitchDetailModal}
+        fullWidth
+      >
         <DialogTitle>{pitch.idea_name}</DialogTitle>
         <DialogContent>
           {edit ? (
@@ -143,28 +153,40 @@ export default function PitchDetails(props) {
             </Box>
           ) : (
             <>
-            <div style={styles.textStyle}>
-                <Typography sx={{fontWeight: 'bold'}}>Summary: </Typography>&nbsp;
+              <div style={styles.textStyle}>
+                <Typography sx={{ fontWeight: "bold" }}>Summary: </Typography>
+                &nbsp;
                 <Typography>{pitch.short_description}</Typography>
               </div>
               <div style={styles.textStyle}>
-                <Typography sx={{fontWeight: 'bold'}}>Details: </Typography>&nbsp;
+                <Typography sx={{ fontWeight: "bold" }}>Details: </Typography>
+                &nbsp;
                 <Typography>{pitch.long_description}</Typography>
               </div>
               <div style={styles.textStyle}>
-                <Typography sx={{fontWeight: 'bold'}}>Valuation: </Typography>&nbsp;
+                <Typography sx={{ fontWeight: "bold" }}>Valuation: </Typography>
+                &nbsp;
                 <Typography>{pitch.company_valuation}$</Typography>
               </div>
               <div style={styles.textStyle}>
-                <Typography sx={{fontWeight: 'bold'}}>Proposed Equity (%): </Typography>&nbsp;
+                <Typography sx={{ fontWeight: "bold" }}>
+                  Proposed Equity (%):{" "}
+                </Typography>
+                &nbsp;
                 <Typography>{pitch.equity}%</Typography>
               </div>
               <div style={styles.textStyle}>
-                <Typography sx={{fontWeight: 'bold'}}>Progress So Far: </Typography>&nbsp;
+                <Typography sx={{ fontWeight: "bold" }}>
+                  Progress So Far:{" "}
+                </Typography>
+                &nbsp;
                 <Typography>{pitch.progress}</Typography>
               </div>
               <div style={styles.textStyle}>
-                <Typography sx={{fontWeight: 'bold'}}>Future Plan: </Typography>&nbsp;
+                <Typography sx={{ fontWeight: "bold" }}>
+                  Future Plan:{" "}
+                </Typography>
+                &nbsp;
                 <Typography>{pitch.plan}</Typography>
               </div>
             </>
@@ -185,11 +207,12 @@ export default function PitchDetails(props) {
             )
           ) : (
             <>
-              <Button>Accept</Button>
+              <Button onClick={() => setOpenInvestModal(true)}>Accept</Button>
               <Button onClick={props.closePitchDetailModal}>Close</Button>
             </>
           )}
         </DialogActions>
+        <Invest pitch={pitch} openInvestModal={openInvestModal} closeInvestModal={closeInvestModal} />
       </Dialog>
     )
   );

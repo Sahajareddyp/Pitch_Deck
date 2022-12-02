@@ -7,6 +7,7 @@ const registrationRoutes = require('./src/routes/registration.route');
 const loginRoutes = require('./src/routes/login.route');
 const userRoutes = require('./src/routes/user.route');
 const ideaRoutes = require('./src/routes/idea.route');
+const investRoutes = require('./src/routes/invest.route');
 
 const app = express();
 console.log(__dirname);
@@ -24,6 +25,7 @@ registrationRoutes(app);
 loginRoutes(app);
 userRoutes(app);
 ideaRoutes(app);
+investRoutes(app);
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

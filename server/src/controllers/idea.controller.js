@@ -39,6 +39,8 @@ const getAllPitch = async (req, res) => {
     let allPitch = [];
     let investedPitch = [];
     let investedPitchIds = [];
+    let fullFilledPitches = [];
+    let fullFilledPitchesIds = [];
 
     let { data: invest, error } = await supabase.from("invest").select("*");
     if (error) {
@@ -47,10 +49,10 @@ const getAllPitch = async (req, res) => {
         .send({ message: "Could not fetch Data. Please try again later" });
     } else {
       for (let i = 0; i < invest.length; i++) {
-        console.log(invest[i].investorId);
-        const bytes = CryptoJS.AES.decrypt(invest[i].investorId, PASSPHRASE);
+        // console.log(invest[i].investorId);
+        // const bytes = CryptoJS.AES.decrypt(invest[i].investorId, PASSPHRASE);
         // const originalText = bytes.toString(CryptoJS.enc.Utf8);
-        console.log(bytes);
+        // console.log(bytes);
         // console.log(originalText);
         if (
           req.params.userId ===
@@ -68,13 +70,25 @@ const getAllPitch = async (req, res) => {
         }
       }
 
-      allPitch = idea.filter((id) => !investedPitchIds.includes(id.idea_id));
+      let { data: FullfilledInvestment, error } = await supabase
+        .from("FullfilledInvestment")
+        .select("*")
+        .eq('investorId', req.params.userId);
+
+      if(FullfilledInvestment) {
+        FullfilledInvestment.forEach((idea) => fullFilledPitchesIds.push(idea.ideaId));
+      }
+
+      allPitch = idea.filter((id) => !investedPitchIds.includes(id.idea_id) && !fullFilledPitchesIds.includes(id.idea_id));
       investedPitch = idea.filter((id) =>
         investedPitchIds.includes(id.idea_id)
       );
+      fullFilledPitches = idea.filter((id) => fullFilledPitchesIds.includes(id.idea_id));
+
       const pitchData = {
         allPitch: allPitch,
         investedPitch: investedPitch,
+        fullFilledPitch: fullFilledPitches
       };
       res
         .status(200)

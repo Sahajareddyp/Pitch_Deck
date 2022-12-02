@@ -10,7 +10,7 @@ const createInvestment = async (req, res) => {
     req.body.newInvestment.investorId,
     PASSPHRASE
   ).toString();
-  console.log(investorId);
+  // console.log(investorId);
   //   console.log(CryptoJS.AES.decrypt(investorId, PASSPHRASE).toString(CryptoJS.enc.Utf8))
   const ideaId = CryptoJS.AES.encrypt(
     req.body.newInvestment.ideaId.toString(),
@@ -45,6 +45,7 @@ const createInvestment = async (req, res) => {
       .status(400)
       .send("There was some issue with the server. Please try again later");
   } else {
+    checkCriteria(req.body.newInvestment.ideaId.toString());
     res.status(200).send("Successfully added the investment");
   }
 };
@@ -93,4 +94,70 @@ const getInvestementDetails = async (req, res) => {
       .send({ message: "Found details", details, isDetailsPresent });
   }
 };
+
+const checkCriteria = async (ideaId) => {
+  const investementsForSelectedIdea = [];
+  let { data: invest, error } = await supabase.from("invest").select("*");
+  if (error) {
+    console.log(error);
+  } else {
+    for (let i = 0; i < invest.length; i++) {
+      if (
+        ideaId ===
+        CryptoJS.AES.decrypt(invest[i].ideaId, PASSPHRASE).toString(
+          CryptoJS.enc.Utf8
+        )
+      ) {
+        investementsForSelectedIdea.push({
+          ...invest[i],
+          count: parseInt(
+            CryptoJS.AES.decrypt(invest[i].count, PASSPHRASE).toString(
+              CryptoJS.enc.Utf8
+            )
+          ),
+        });
+      }
+    }
+    const totalInterest = investementsForSelectedIdea.length;
+    const fulfilledCriterias = investementsForSelectedIdea.filter(
+      (idea) => idea.count <= totalInterest - 1
+    );
+
+    const fullfilledInvestmentDetails = [];
+
+    fulfilledCriterias.forEach(async (idea) => {
+      const { data, error } = await supabase
+        .from("invest")
+        .delete()
+        .eq("id", idea.id);
+        console.log(error);
+        console.log(data);
+    });
+
+    fulfilledCriterias.forEach((idea) => {
+      fullfilledInvestmentDetails.push({
+        investorId: CryptoJS.AES.decrypt(idea.investorId, PASSPHRASE).toString(
+          CryptoJS.enc.Utf8
+        ),
+        ideaId: parseInt(
+          CryptoJS.AES.decrypt(idea.ideaId, PASSPHRASE).toString(
+            CryptoJS.enc.Utf8
+          )
+        ),
+        comments: CryptoJS.AES.decrypt(idea.comment, PASSPHRASE).toString(
+          CryptoJS.enc.Utf8
+        ),
+      });
+    });
+
+    console.log(fullfilledInvestmentDetails);
+    const { data, error } = await supabase
+      .from("FullfilledInvestment")
+      .insert(fullfilledInvestmentDetails);
+
+    console.log(data);
+    console.log(error);
+  }
+};
+
 module.exports = { createInvestment, getInvestementDetails };

@@ -47,6 +47,7 @@ export default function Dashboard() {
   const [openNewPitch, setOpenNewPitch] = React.useState(false);
   const [allPitch, setAllPitch] = React.useState([]);
   const [investedPitch, setInvestedPitch] = React.useState([]);
+  const [fullFilledPitch, setFullFilledPitch] = React.useState([]);
   const [openDetail, setOpenDetails] = React.useState(false);
   const [selectedPitch, setSelectedPitch] = React.useState(null);
   const [value, setValue] = React.useState(0);
@@ -89,6 +90,7 @@ export default function Dashboard() {
         console.log(response);
         setAllPitch(response.data.data.allPitch);
         setInvestedPitch(response.data.data.investedPitch)
+        setFullFilledPitch(response.data.data.fullFilledPitch)
       })
       .catch((err) => {
         console.log(err);
@@ -141,6 +143,7 @@ export default function Dashboard() {
         >
           <Tab label="All Pitch" {...a11yProps(0)} />
           <Tab label="Invested Pitch" {...a11yProps(1)} />
+          <Tab label="FullFilled Pitch" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -194,6 +197,44 @@ export default function Dashboard() {
       <Container maxWidth="lg" style={styles.containerStyle}>
           <Container maxWidth="lg" style={styles.cardContianerStyle}>
             {investedPitch.map((pitch) => {
+              return (
+                <Card
+                  sx={{ maxWidth: 150 }}
+                  style={styles.cardStyle}
+                  key={pitch.idea_id}
+                >
+                  <CardContent>
+                    <Typography
+                      sx={{ fontSize: 14 }}
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      {pitch.idea_name}
+                    </Typography>
+
+                    <Typography variant="body2">
+                      {pitch.short_description}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      onClick={(e) => openPitchDetailModal(pitch)}
+                    >
+                      Learn More
+                    </Button>
+                  </CardActions>
+                </Card>
+              );
+            })}
+          </Container>
+        </Container>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+      <Container maxWidth="lg" style={styles.containerStyle}>
+          <Container maxWidth="lg" style={styles.cardContianerStyle}>
+            {fullFilledPitch.map((pitch) => {
               return (
                 <Card
                   sx={{ maxWidth: 150 }}

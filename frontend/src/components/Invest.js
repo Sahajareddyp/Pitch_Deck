@@ -27,6 +27,7 @@ export default function Invest(props) {
     count: "0",
     comment: "",
   });
+  const [isAcceptDisabled, setIsAcceptDisabled] = useState(false);
 
   const styles = {
     textField: {
@@ -48,6 +49,7 @@ export default function Invest(props) {
             count: parseInt(details.count),
             comment: details.comment,
           });
+          setIsAcceptDisabled(true);
         }
       });
   }, []);
@@ -89,7 +91,7 @@ export default function Invest(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={createInvestment}>Invest</Button>
+        <Button disabled={isAcceptDisabled} onClick={createInvestment}>Invest</Button>
         <Button onClick={props.closeInvestModal}>Close</Button>
       </DialogActions>
     </Dialog>

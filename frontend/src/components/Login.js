@@ -147,7 +147,8 @@ export default function Login() {
           label="Email"
           fullWidth
           sx={{
-            fieldset: !credentialValidation.emailValid ? styles.errorStyle: styles.textfieldStyle
+            fieldset: !credentialValidation.emailValid ? styles.errorStyle: styles.textfieldStyle,
+            input: styles.textfieldColor
           }}
           InputLabelProps={{
             style: styles.textfieldColor,
@@ -169,7 +170,8 @@ export default function Login() {
           value={credential.password}
           type="password"
           sx={{
-            fieldset: !credentialValidation.passwordValid ? styles.errorStyle: styles.textfieldStyle
+            fieldset: !credentialValidation.passwordValid ? styles.errorStyle: styles.textfieldStyle,
+            input: styles.textfieldColor
           }}
           InputLabelProps={{
             style: styles.textfieldColor,

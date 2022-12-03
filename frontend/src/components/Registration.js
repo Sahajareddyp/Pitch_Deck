@@ -57,14 +57,23 @@ export default function Registration(props) {
       borderColor: "#5DFFED",
     },
     errorText: {
-      color: "red",
-      marginTop: "0px",
-      marginLeft: "10px",
+      // color: "red",
+      // marginTop: "0px",
+      // marginLeft: "10px",
     },
     dialogStyle: {
       backgroundColor: "#18171B",
-      borderColor: "#5DFFED"
-    }
+      borderColor: "#5DFFED",
+      color: "#5DFFED",
+    },
+    textfieldColor: {
+      color: "#5DFFED",
+    },
+    menuItemStyle: {
+      backgroundColor: "#18171B",
+      color: "#5DFFED",
+      margin: "0px"
+    },
   };
   const navigate = useNavigate();
 
@@ -146,10 +155,39 @@ export default function Registration(props) {
         });
     }
   };
+
+  const closeDialog = () => {
+    setUserValidation({
+      firstNameValid: true,
+      firstNameError: "",
+      lastNameValid: true,
+      lastNameError: "",
+      emailIdValid: true,
+      emailIdError: "",
+      companyValid: true,
+      companyError: "",
+      passwordValid: true,
+      passwordError: "",
+      confirmPasswordValid: true,
+      confirmPasswordError: "",
+    });
+    setNewUser({
+      firstName: "",
+      lastName: "",
+      emailId: "",
+      roleid: 2,
+      company: "",
+      password: "",
+      confirmPassword: "",
+    });
+    props.closeRegistrationDialog();
+  };
+
   return (
     <Dialog
       open={props.openRegistration}
-      onClose={props.closeRegistrationDialog}
+      onClose={closeDialog}
+      PaperProps={{ style: styles.dialogStyle }}
     >
       <DialogTitle>Sign Up</DialogTitle>
       <DialogContent>
@@ -165,6 +203,10 @@ export default function Registration(props) {
               fieldset: userValidation.firstNameValid
                 ? styles.textfieldStyle
                 : styles.errorStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
             }}
           />
           {!userValidation.firstNameValid && (
@@ -181,6 +223,10 @@ export default function Registration(props) {
               fieldset: userValidation.lastNameValid
                 ? styles.textfieldStyle
                 : styles.errorStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
             }}
           />
           {!userValidation.lastNameValid && (
@@ -197,6 +243,10 @@ export default function Registration(props) {
               fieldset: userValidation.emailIdValid
                 ? styles.textfieldStyle
                 : styles.errorStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
             }}
           />
           {!userValidation.emailIdValid && (
@@ -213,22 +263,41 @@ export default function Registration(props) {
               fieldset: userValidation.companyValid
                 ? styles.textfieldStyle
                 : styles.errorStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
             }}
           />
           {!userValidation.companyValid && (
             <p style={styles.errorText}>{userValidation.companyError}</p>
           )}
           <FormControl style={styles.textField}>
-            <InputLabel id="demo-simple-select-label">Role</InputLabel>
+            <InputLabel
+              id="demo-simple-select-label"
+              style={styles.textfieldColor}
+            >
+              Role
+            </InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="Role"
               value={newUser.roleid}
               onChange={(e) => handleChange(e, "roleid")}
+              sx={{
+                fieldset: userValidation.companyValid
+                  ? styles.textfieldStyle
+                  : styles.errorStyle,
+                input: styles.textfieldColor,
+              }}
             >
               {rolesList.map((role) => (
-                <MenuItem value={role.id} key={role.id}>
+                <MenuItem
+                  style={styles.menuItemStyle}
+                  value={role.id}
+                  key={role.id}
+                >
                   {`${role.role}`}
                 </MenuItem>
               ))}
@@ -246,6 +315,10 @@ export default function Registration(props) {
               fieldset: userValidation.passwordValid
                 ? styles.textfieldStyle
                 : styles.errorStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
             }}
           />
           {!userValidation.passwordValid && (
@@ -263,6 +336,10 @@ export default function Registration(props) {
               fieldset: userValidation.confirmPasswordValid
                 ? styles.textfieldStyle
                 : styles.errorStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
             }}
           />
           {!userValidation.confirmPasswordValid && (
@@ -273,7 +350,7 @@ export default function Registration(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.closeRegistrationDialog}>Cancel</Button>
+        <Button onClick={closeDialog}>Cancel</Button>
         <Button onClick={onSignUpClick}>Sign Up</Button>
       </DialogActions>
     </Dialog>

@@ -68,11 +68,11 @@ const resetPassword = async (req, res) => {
   const accessToken = req.body.accessToken;
   const supabaseUsingToken = createClient(
     process.env.VITE_APP_SUPABASE_URL,
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybGJibXJyYWpvdndycmJ1ZmR1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY2ODM4NDEwNSwiZXhwIjoxOTgzOTYwMTA1fQ.h78zWNod5wLXfFQnMFdcdjh3vTsIG8J-jh1ncFTD_PE",
+    "",
     {
       global: {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybGJibXJyYWpvdndycmJ1ZmR1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY2ODM4NDEwNSwiZXhwIjoxOTgzOTYwMTA1fQ.h78zWNod5wLXfFQnMFdcdjh3vTsIG8J-jh1ncFTD_PE`,
+          Authorization: `Bearer ${accessToken}`,
         },
         auth: {
           persistSession: true,
@@ -100,7 +100,7 @@ const resetPassword = async (req, res) => {
   //   }
   // );
   // let response = await supabaseUsingToken.auth.updateUser({ password });
-  let response = await  supabaseUsingToken.auth.admin.listUsers()
+  let response = await  supabase.auth.admin.listUsers()
   console.log(response);
   if (response.error) {
     res

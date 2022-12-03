@@ -81,7 +81,7 @@ const getAllPitch = async (req, res) => {
 
       allPitch = idea.filter((id) => !investedPitchIds.includes(id.idea_id) && !fullFilledPitchesIds.includes(id.idea_id));
       investedPitch = idea.filter((id) =>
-        investedPitchIds.includes(id.idea_id)
+        investedPitchIds.includes(id.idea_id) && !fullFilledPitchesIds.includes(id.idea_id)
       );
       fullFilledPitches = idea.filter((id) => fullFilledPitchesIds.includes(id.idea_id));
 

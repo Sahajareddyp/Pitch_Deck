@@ -125,14 +125,14 @@ const checkCriteria = async (ideaId) => {
 
     const fullfilledInvestmentDetails = [];
 
-    fulfilledCriterias.forEach(async (idea) => {
-      const { data, error } = await supabase
-        .from("invest")
-        .delete()
-        .eq("id", idea.id);
-        console.log(error);
-        console.log(data);
-    });
+    // fulfilledCriterias.forEach(async (idea) => {
+    //   const { data, error } = await supabase
+    //     .from("invest")
+    //     .delete()
+    //     .eq("id", idea.id);
+    //     console.log(error);
+    //     console.log(data);
+    // });
 
     fulfilledCriterias.forEach((idea) => {
       fullfilledInvestmentDetails.push({

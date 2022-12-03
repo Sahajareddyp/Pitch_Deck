@@ -15,7 +15,7 @@ export default function Login() {
       margin: "25px",
     },
     container: {
-      border: "1px solid blue",
+      border: "1px solid #5DFFED",
       padding: "15px",
       minHeight: "80vh",
     },
@@ -24,6 +24,27 @@ export default function Login() {
       justifyContent: "space-between",
       margin: "10px",
     },
+    errorStyle: {
+      borderColor: "red",
+    },
+    textfieldStyle: {
+      borderColor: "#5DFFED",
+    },
+    textfieldColor: {
+      color: "#5DFFED"
+    },
+    errorText: {
+      color: "red",
+      float: "left",
+      marginTop: "0px"
+    },
+    linkStyle: {
+      color: "#5DFFED"
+    },
+    buttonStyle: {
+      backgroundColor: "#5DFFED",
+      color: "#18171B"
+    }
   };
 
   const [openRegistration, setOpenRegistration] = React.useState(false);
@@ -31,7 +52,14 @@ export default function Login() {
     email: "",
     password: "",
   });
-  const [openForgotPasswordDialog, setOpenForgotPasswordDialog] = React.useState(false);
+  const [credentialValidation, setCredentialValidation] = React.useState({
+    emailValid: true,
+    passwordValid: true,
+    emailError: "",
+    passwordError: "",
+  });
+  const [openForgotPasswordDialog, setOpenForgotPasswordDialog] =
+    React.useState(false);
 
   const navigate = useNavigate();
   const {
@@ -49,7 +77,7 @@ export default function Login() {
     toastContent,
     setToastContent,
     severity,
-    setSeverity
+    setSeverity,
   } = React.useContext(ToastContext);
 
   const openDialog = () => {
@@ -61,36 +89,55 @@ export default function Login() {
   };
 
   const textChangeHandler = (event, prop) => {
-    setCredentials({ ...credential, [prop]: event.target.value });
+    setCredentials({ ...credential, [prop]: event.target.value.trim() });
+  };
+
+  const validateForm = () => {
+    const emailValid = credential.email !== "";
+    const emailError = emailValid ? "" : "Please enter a valid email Id";
+    const passwordValid = credential.password !== "";
+    const passwordError = passwordValid ? "" : "This field cannot be empty";
+    setCredentialValidation({
+      emailValid,
+      emailError,
+      passwordValid,
+      passwordError,
+    });
+    return emailValid && passwordValid;
   };
 
   const closeForgotPasswordDialog = () => {
     setOpenForgotPasswordDialog(false);
-  }
+  };
 
   const handleSignIn = () => {
-    axios
-      .post("/api/login", credential)
-      .then((response) => {
-        console.log(response);
-        setEmail(credential.email);
-        setSession(response.data.session.access_token);
-        window.sessionStorage.setItem("sessionKey", response.data.session.access_token);
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
-        setOpenToast(true);
-        setSeverity("error");
-        setToastContent(err.response.data.message);
-      });
+    if (validateForm()) {
+      axios
+        .post("/api/login", credential)
+        .then((response) => {
+          console.log(response);
+          setEmail(credential.email);
+          setSession(response.data.session.access_token);
+          window.sessionStorage.setItem(
+            "sessionKey",
+            response.data.session.access_token
+          );
+          navigate("/");
+        })
+        .catch((err) => {
+          console.log(err);
+          setOpenToast(true);
+          setSeverity("error");
+          setToastContent(err.response.data.message);
+        });
+    }
   };
 
   React.useEffect(() => {
-    if(sessionStorage.getItem("sessionKey")){
+    if (sessionStorage.getItem("sessionKey")) {
       navigate("/");
     }
-  }, [])
+  }, []);
   return (
     <Box style={styles.box}>
       <Container style={styles.container} maxWidth="sm">
@@ -99,9 +146,18 @@ export default function Login() {
           id="outlined-required"
           label="Email"
           fullWidth
+          sx={{
+            fieldset: !credentialValidation.emailValid ? styles.errorStyle: styles.textfieldStyle
+          }}
+          InputLabelProps={{
+            style: styles.textfieldColor,
+          }}
           value={credential.email}
           onChange={(e) => textChangeHandler(e, "email")}
         />
+        {!credentialValidation.emailValid && (
+          <p style={styles.errorText}>{credentialValidation.emailError}</p>
+        )}
         <br />
         <br />
         <br />
@@ -112,25 +168,36 @@ export default function Login() {
           fullWidth
           value={credential.password}
           type="password"
+          sx={{
+            fieldset: !credentialValidation.passwordValid ? styles.errorStyle: styles.textfieldStyle
+          }}
+          InputLabelProps={{
+            style: styles.textfieldColor,
+          }}
           onChange={(e) => textChangeHandler(e, "password")}
         />
+        {!credentialValidation.passwordValid && (
+          <p style={styles.errorText}>{credentialValidation.passwordError}</p>
+        )}
+
+        {}
         <br />
         <br />
-        <br />
-        <Button variant="contained" fullWidth onClick={handleSignIn}>
+        <Button style={styles.buttonStyle} variant="contained" fullWidth onClick={handleSignIn}>
           Sign In
         </Button>
         <div style={styles.footerLinksDiv}>
           <Link
             component="button"
             variant="body2"
+            style={styles.linkStyle}
             onClick={() => {
               // setOpenForgotPasswordDialog(true);
             }}
           >
             Forgot Password?
           </Link>
-          <Link component="button" variant="body2" onClick={openDialog}>
+          <Link style={styles.linkStyle} component="button" variant="body2" onClick={openDialog}>
             Sign Up
           </Link>
         </div>
@@ -139,7 +206,10 @@ export default function Login() {
         openRegistration={openRegistration}
         closeRegistrationDialog={closeRegistrationDialog}
       />
-      <ForgotPassword openForgotPasswordDialog={openForgotPasswordDialog} closeForgotPasswordDialog={closeForgotPasswordDialog}/>
+      <ForgotPassword
+        openForgotPasswordDialog={openForgotPasswordDialog}
+        closeForgotPasswordDialog={closeForgotPasswordDialog}
+      />
     </Box>
   );
 }

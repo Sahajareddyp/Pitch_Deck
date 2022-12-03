@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const { supabase } = require("../supabaseClient");
+const { createClient } = require("@supabase/supabase-js");
 
 const loginUser = async (req, res) => {
   const user = await supabase.auth.signInWithPassword({
@@ -64,12 +65,42 @@ const forgotPassword = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   const password = req.body.password;
-  console.log(req.body.accessToken);
-  const userSession = await supabase.auth.getUser(req.body.accessToken);
-  console.log(userSession);
-  let response = await supabase.auth.admin.updateUserById(userSession.data.user.id, {
-    password,
+  const accessToken = req.body.accessToken;
+  const supabaseUsingToken = createClient(
+    process.env.VITE_APP_SUPABASE_URL,
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybGJibXJyYWpvdndycmJ1ZmR1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY2ODM4NDEwNSwiZXhwIjoxOTgzOTYwMTA1fQ.h78zWNod5wLXfFQnMFdcdjh3vTsIG8J-jh1ncFTD_PE",
+    {
+      global: {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBybGJibXJyYWpvdndycmJ1ZmR1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY2ODM4NDEwNSwiZXhwIjoxOTgzOTYwMTA1fQ.h78zWNod5wLXfFQnMFdcdjh3vTsIG8J-jh1ncFTD_PE`,
+        },
+        auth: {
+          persistSession: true,
+        },
+      },
+    }
+  );
+  // const intialize = await supabaseUsingToken.auth.initialize();
+  // console.log(intialize);
+  const setSession = await supabaseUsingToken.auth.setSession({
+    access_token: accessToken,
   });
+  // console.log(setSession);
+  // const refreshSession = await supabaseUsingToken.auth.refreshSession(
+  //   setSession.data.session
+  // );
+  // console.log(refreshSession);
+  const userSession = await supabaseUsingToken.auth.getUser();
+  console.log(userSession);
+
+  // let response = await supabaseUsingToken.auth.admin.updateUserById(
+  //   userSession.data.user.id,
+  //   {
+  //     password,
+  //   }
+  // );
+  // let response = await supabaseUsingToken.auth.updateUser({ password });
+  let response = await  supabaseUsingToken.auth.admin.listUsers()
   console.log(response);
   if (response.error) {
     res

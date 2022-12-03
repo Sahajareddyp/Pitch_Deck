@@ -125,7 +125,7 @@ export default function Login() {
             component="button"
             variant="body2"
             onClick={() => {
-              setOpenForgotPasswordDialog(true);
+              // setOpenForgotPasswordDialog(true);
             }}
           >
             Forgot Password?

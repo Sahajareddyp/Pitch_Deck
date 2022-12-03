@@ -7,6 +7,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import { ToastContext } from "../contexts/ToastContext";
+import ForgotPassword from "./ForgotPassword";
 
 export default function Login() {
   const styles = {
@@ -30,6 +31,8 @@ export default function Login() {
     email: "",
     password: "",
   });
+  const [openForgotPasswordDialog, setOpenForgotPasswordDialog] = React.useState(false);
+
   const navigate = useNavigate();
   const {
     email,
@@ -60,6 +63,10 @@ export default function Login() {
   const textChangeHandler = (event, prop) => {
     setCredentials({ ...credential, [prop]: event.target.value });
   };
+
+  const closeForgotPasswordDialog = () => {
+    setOpenForgotPasswordDialog(false);
+  }
 
   const handleSignIn = () => {
     axios
@@ -118,7 +125,7 @@ export default function Login() {
             component="button"
             variant="body2"
             onClick={() => {
-              console.info("I'm a button.");
+              setOpenForgotPasswordDialog(true);
             }}
           >
             Forgot Password?
@@ -132,6 +139,7 @@ export default function Login() {
         openRegistration={openRegistration}
         closeRegistrationDialog={closeRegistrationDialog}
       />
+      <ForgotPassword openForgotPasswordDialog={openForgotPasswordDialog} closeForgotPasswordDialog={closeForgotPasswordDialog}/>
     </Box>
   );
 }

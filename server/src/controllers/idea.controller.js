@@ -44,6 +44,7 @@ const getAllPitch = async (req, res) => {
 
     let { data: invest, error } = await supabase.from("invest").select("*");
     if (error) {
+      console.log(error);
       res
         .status(500)
         .send({ message: "Could not fetch Data. Please try again later" });
@@ -73,22 +74,32 @@ const getAllPitch = async (req, res) => {
       let { data: FullfilledInvestment, error } = await supabase
         .from("FullfilledInvestment")
         .select("*")
-        .eq('investorId', req.params.userId);
+        .eq("investorId", req.params.userId);
 
-      if(FullfilledInvestment) {
-        FullfilledInvestment.forEach((idea) => fullFilledPitchesIds.push(idea.ideaId));
+      if (FullfilledInvestment) {
+        FullfilledInvestment.forEach((idea) =>
+          fullFilledPitchesIds.push(idea.ideaId)
+        );
       }
 
-      allPitch = idea.filter((id) => !investedPitchIds.includes(id.idea_id) && !fullFilledPitchesIds.includes(id.idea_id));
-      investedPitch = idea.filter((id) =>
-        investedPitchIds.includes(id.idea_id) && !fullFilledPitchesIds.includes(id.idea_id)
+      allPitch = idea.filter(
+        (id) =>
+          !investedPitchIds.includes(id.idea_id) &&
+          !fullFilledPitchesIds.includes(id.idea_id)
       );
-      fullFilledPitches = idea.filter((id) => fullFilledPitchesIds.includes(id.idea_id));
+      investedPitch = idea.filter(
+        (id) =>
+          investedPitchIds.includes(id.idea_id) &&
+          !fullFilledPitchesIds.includes(id.idea_id)
+      );
+      fullFilledPitches = idea.filter((id) =>
+        fullFilledPitchesIds.includes(id.idea_id)
+      );
 
       const pitchData = {
         allPitch: allPitch,
         investedPitch: investedPitch,
-        fullFilledPitch: fullFilledPitches
+        fullFilledPitch: fullFilledPitches,
       };
       res
         .status(200)
@@ -111,6 +122,7 @@ const getPitchByUser = async (req, res) => {
       .send({ message: "Could not fetch Data. Please try again later" });
   } else {
     const ideaIds = ideas.map((i) => i.ideaId);
+
     let { data: idea, error } = await supabase
       .from("idea")
       .select("*")
@@ -121,9 +133,55 @@ const getPitchByUser = async (req, res) => {
         .status(500)
         .send({ message: "Could not fetch Data. Please try again later" });
     } else {
-      res
-        .status(200)
-        .send({ message: "Successfully fetched data", data: idea });
+      let { data: FullfilledInvestment, fullFilledError } = await supabase
+        .from("FullfilledInvestment")
+        .select("*")
+        .in("ideaId", ideaIds);
+
+      if (fullFilledError) {
+        res
+          .status(500)
+          .send({ message: "Could not fetch Data. Please try again later" });
+      } else {
+        console.log(FullfilledInvestment);
+        const investorIds = FullfilledInvestment.map((i) => i.investorId);
+        let { data: user, error } = await supabase
+          .from("user")
+          .select("*")
+          .in("id", investorIds);
+
+        if (error) {
+          res
+            .status(500)
+            .send({ message: "Could not fetch Data. Please try again later" });
+        } else {
+          const fullfilledData = [];
+          const fullFilledIdeaIds = [];
+          FullfilledInvestment.forEach((investment) => {
+            fullFilledIdeaIds.push(investment.ideaId);
+            const tempIdea = idea.filter(
+              (id) => id.idea_id === investment.ideaId
+            );
+            const investor = user.filter((u) => u.id === investment.investorId);
+            fullfilledData.push({
+              ...tempIdea[0],
+              investor,
+            });
+          });
+          // console.log(fullFilledIdeaIds);
+          // console.log(fullfilledData);
+          const pitches = idea.filter(
+            (id) => !fullFilledIdeaIds.includes(id.idea_id)
+          );
+          res
+            .status(200)
+            .send({
+              message: "Successfully fetched data",
+              pitches,
+              fullfilledData,
+            });
+        }
+      }
     }
   }
 };

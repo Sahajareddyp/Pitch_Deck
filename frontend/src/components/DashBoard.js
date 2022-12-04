@@ -23,7 +23,7 @@ export default function Dashboard() {
     containerStyle: {
       border: "1px solid #5DFFED",
       margin: "10px",
-      height: "75vh"
+      height: "75vh",
     },
     cardStyle: {
       margin: "10px",
@@ -47,7 +47,13 @@ export default function Dashboard() {
     button: {
       color: "#18171B",
       backgroundColor: "#5DFFED",
-    }
+    },
+    createButton: {
+      color: "#18171B",
+      backgroundColor: "#5DFFED",
+      float: "right",
+      margin: "5px",
+    },
   };
   const {
     email,
@@ -116,7 +122,8 @@ export default function Dashboard() {
     axios
       .get(`/api/getPitchByUser/${userId}`)
       .then((response) => {
-        setAllPitch(response.data.data);
+        setAllPitch(response.data.pitches);
+        setInvestedPitch(response.data.fullfilledData);
       })
       .catch((err) => {
         console.log(err);
@@ -139,38 +146,66 @@ export default function Dashboard() {
     setOpenDetails(true);
   };
 
-  const closePitchDetailModal = (e, wasDataUpdated = false) => {
+  const closePitchDetailModal = (
+    e,
+    wasDataUpdated = false,
+    wasAccepted = false
+  ) => {
     setOpenDetails(false);
     setSelectedPitch(null);
     if (wasDataUpdated) {
       getPitchByUser(loggedInUser.id);
     }
+    if (wasAccepted) {
+      getAllPitch(loggedInUser.id);
+    }
+  };
+
+  const onViewClick = () => {
+    navigate("/view");
   };
 
   return (
     <Box>
       <NavigationBar />
       <Box sx={{ borderBottom: 0, borderColor: "#5DFFED" }}>
+        <Button style={styles.button} onClick={onViewClick}>
+          View Investments
+        </Button>
         <Tabs
           value={value}
           onChange={handleTabChange}
           aria-label="basic tabs example"
-          TabIndicatorProps={{style: {background:'#5DFFED'}}}
+          TabIndicatorProps={{ style: { background: "#5DFFED" } }}
         >
           <Tab label="All Pitch" {...a11yProps(0)} style={styles.tab} />
-          {loggedInUser.roleid != 2 && <Tab label="Invested Pitch" {...a11yProps(1)} style={styles.tab} />}
-          {loggedInUser.roleid != 2 && <Tab
-            label="FullFilled Pitch"
-            {...a11yProps(2)}
-            style={styles.tab}
-          />}
+          {loggedInUser.roleid != 2 ? (
+            <Tab
+              label="Interested Pitch"
+              {...a11yProps(1)}
+              style={styles.tab}
+            />
+          ) : (
+            <Tab
+              label="FullFilled Pitch"
+              {...a11yProps(1)}
+              style={styles.tab}
+            />
+          )}
+          {loggedInUser.roleid != 2 && (
+            <Tab
+              label="FullFilled Pitch"
+              {...a11yProps(2)}
+              style={styles.tab}
+            />
+          )}
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
         <Container maxWidth style={styles.containerStyle}>
           {loggedInUser.roleid != 3 && (
             <Button
-              style={{ float: "right", margin: "5px" }}
+              style={styles.createButton}
               variant="contained"
               onClick={openNewPitchModal}
             >
@@ -186,10 +221,7 @@ export default function Dashboard() {
                   key={pitch.idea_id}
                 >
                   <CardContent>
-                    <Typography
-                      sx={{ fontSize: 14 }}
-                      gutterBottom
-                    >
+                    <Typography sx={{ fontSize: 14 }} gutterBottom>
                       {pitch.idea_name}
                     </Typography>
 
@@ -197,7 +229,7 @@ export default function Dashboard() {
                       {pitch.short_description}
                     </Typography>
                   </CardContent>
-                  <CardActions style={{justifyContent: "center"}}>
+                  <CardActions style={{ justifyContent: "center" }}>
                     <Button
                       size="small"
                       variant="contained"
@@ -224,10 +256,7 @@ export default function Dashboard() {
                   key={pitch.idea_id}
                 >
                   <CardContent>
-                    <Typography
-                      sx={{ fontSize: 14 }}
-                      gutterBottom
-                    >
+                    <Typography sx={{ fontSize: 14 }} gutterBottom>
                       {pitch.idea_name}
                     </Typography>
 
@@ -235,7 +264,7 @@ export default function Dashboard() {
                       {pitch.short_description}
                     </Typography>
                   </CardContent>
-                  <CardActions style={{justifyContent: "center"}}>
+                  <CardActions style={{ justifyContent: "center" }}>
                     <Button
                       size="small"
                       variant="contained"
@@ -262,10 +291,7 @@ export default function Dashboard() {
                   key={pitch.idea_id}
                 >
                   <CardContent>
-                    <Typography
-                      sx={{ fontSize: 14 }}
-                      gutterBottom
-                    >
+                    <Typography sx={{ fontSize: 14 }} gutterBottom>
                       {pitch.idea_name}
                     </Typography>
 
@@ -273,7 +299,7 @@ export default function Dashboard() {
                       {pitch.short_description}
                     </Typography>
                   </CardContent>
-                  <CardActions style={{justifyContent: "center"}}>
+                  <CardActions style={{ justifyContent: "center" }}>
                     <Button
                       size="small"
                       variant="contained"
@@ -298,6 +324,7 @@ export default function Dashboard() {
         closePitchDetailModal={closePitchDetailModal}
         pitch={selectedPitch}
         userRole={loggedInUser.roleid}
+        getAllPitch={getAllPitch}
       />
     </Box>
   );

@@ -147,10 +147,15 @@ export default function Dashboard() {
     }
   };
 
+  const onViewClick = () => {
+    navigate("/view");
+  }
+
   return (
     <Box>
       <NavigationBar />
       <Box sx={{ borderBottom: 0, borderColor: "#5DFFED" }}>
+        <Button onClick={onViewClick}>View Investments</Button>
         <Tabs
           value={value}
           onChange={handleTabChange}

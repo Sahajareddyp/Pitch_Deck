@@ -45,6 +45,21 @@ export default function PitchDetails(props) {
       display: "flex",
       justifyContent: "start",
     },
+    dialogStyle: {
+      backgroundColor: "#18171B",
+      borderColor: "#5DFFED",
+      color: "#5DFFED",
+    },
+    buttonStyle: {
+      backgroundColor: "#5DFFED",
+      color: "#18171B",
+    },
+    textfieldColor: {
+      color: "#5DFFED",
+    },
+    textfieldStyle: {
+      borderColor: "#5DFFED",
+    },
   };
 
   const handleChange = (event, prop) => {
@@ -78,15 +93,19 @@ export default function PitchDetails(props) {
       });
   };
 
-  const closeInvestModal = () => {
+  const closeInvestModal = (closeDetails = false) => {
     setOpenInvestModal(false);
-  }
+    if(closeDetails){
+      props.closePitchDetailModal(null,false,true);
+    }
+  };
   return (
     pitch && (
       <Dialog
         open={props.openDetail}
         onClose={props.closePitchDetailModal}
         fullWidth
+        PaperProps={{ style: styles.dialogStyle }}
       >
         <DialogTitle>{pitch.idea_name}</DialogTitle>
         <DialogContent>
@@ -99,6 +118,13 @@ export default function PitchDetails(props) {
                 style={styles.textField}
                 value={pitch.idea_name}
                 onChange={(e) => handleChange(e, "idea_name")}
+                sx={{
+                  fieldset: styles.textfieldStyle,
+                  input: styles.textfieldColor,
+                }}
+                InputLabelProps={{
+                  style: styles.textfieldColor,
+                }}
               />
               <TextField
                 required
@@ -107,6 +133,13 @@ export default function PitchDetails(props) {
                 style={styles.textField}
                 value={pitch.short_description}
                 onChange={(e) => handleChange(e, "short_description")}
+                sx={{
+                  fieldset: styles.textfieldStyle,
+                  input: styles.textfieldColor,
+                }}
+                InputLabelProps={{
+                  style: styles.textfieldColor,
+                }}
               />
               <TextField
                 required
@@ -115,6 +148,13 @@ export default function PitchDetails(props) {
                 style={styles.textField}
                 value={pitch.long_description}
                 onChange={(e) => handleChange(e, "long_description")}
+                sx={{
+                  fieldset: styles.textfieldStyle,
+                  input: styles.textfieldColor,
+                }}
+                InputLabelProps={{
+                  style: styles.textfieldColor,
+                }}
               />
               <TextField
                 required
@@ -124,6 +164,13 @@ export default function PitchDetails(props) {
                 value={pitch.company_valuation}
                 type="number"
                 onChange={(e) => handleChange(e, "company_valuation")}
+                sx={{
+                  fieldset: styles.textfieldStyle,
+                  input: styles.textfieldColor,
+                }}
+                InputLabelProps={{
+                  style: styles.textfieldColor,
+                }}
               />
               <TextField
                 required
@@ -133,6 +180,13 @@ export default function PitchDetails(props) {
                 value={pitch.equity}
                 type="number"
                 onChange={(e) => handleChange(e, "equity")}
+                sx={{
+                  fieldset: styles.textfieldStyle,
+                  input: styles.textfieldColor,
+                }}
+                InputLabelProps={{
+                  style: styles.textfieldColor,
+                }}
               />
               <TextField
                 required
@@ -141,6 +195,13 @@ export default function PitchDetails(props) {
                 style={styles.textField}
                 value={pitch.progress}
                 onChange={(e) => handleChange(e, "progress")}
+                sx={{
+                  fieldset: styles.textfieldStyle,
+                  input: styles.textfieldColor,
+                }}
+                InputLabelProps={{
+                  style: styles.textfieldColor,
+                }}
               />
               <TextField
                 required
@@ -149,6 +210,13 @@ export default function PitchDetails(props) {
                 style={styles.textField}
                 value={pitch.plan}
                 onChange={(e) => handleChange(e, "plan")}
+                sx={{
+                  fieldset: styles.textfieldStyle,
+                  input: styles.textfieldColor,
+                }}
+                InputLabelProps={{
+                  style: styles.textfieldColor,
+                }}
               />
             </Box>
           ) : (
@@ -196,23 +264,49 @@ export default function PitchDetails(props) {
           {props.userRole == 2 ? (
             edit ? (
               <>
-                <Button onClick={saveHandle}>Save</Button>
-                <Button onClick={cancelHandle}>Cancel</Button>
+                <Button style={styles.buttonStyle} onClick={saveHandle}>
+                  Save
+                </Button>
+                <Button style={styles.buttonStyle} onClick={cancelHandle}>
+                  Cancel
+                </Button>
               </>
             ) : (
               <>
-                <Button onClick={editHandle}>Edit</Button>
-                <Button onClick={props.closePitchDetailModal}>Close</Button>
+                <Button style={styles.buttonStyle} onClick={editHandle}>
+                  Edit
+                </Button>
+                <Button
+                  style={styles.buttonStyle}
+                  onClick={props.closePitchDetailModal}
+                >
+                  Close
+                </Button>
               </>
             )
           ) : (
             <>
-              <Button onClick={() => setOpenInvestModal(true)}>Accept</Button>
-              <Button onClick={props.closePitchDetailModal}>Close</Button>
+              <Button
+                style={styles.buttonStyle}
+                onClick={() => setOpenInvestModal(true)}
+              >
+                Accept
+              </Button>
+              <Button
+                style={styles.buttonStyle}
+                onClick={props.closePitchDetailModal}
+              >
+                Close
+              </Button>
             </>
           )}
         </DialogActions>
-        <Invest pitch={pitch} openInvestModal={openInvestModal} closeInvestModal={closeInvestModal} />
+        <Invest
+          pitch={pitch}
+          openInvestModal={openInvestModal}
+          closeInvestModal={closeInvestModal}
+          getAllPitch={props.getAllPitch}
+        />
       </Dialog>
     )
   );

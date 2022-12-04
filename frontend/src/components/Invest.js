@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import { ToastContext } from "../contexts/ToastContext";
 import { UserContext } from "../contexts/UserContext";
 
 export default function Invest(props) {
@@ -34,7 +35,31 @@ export default function Invest(props) {
       margin: "10px",
       width: "90%",
     },
+    dialogStyle: {
+      backgroundColor: "#18171B",
+      borderColor: "#5DFFED",
+      color: "#5DFFED",
+    },
+    textfieldColor: {
+      color: "#5DFFED",
+    },
+    textfieldStyle: {
+      borderColor: "#5DFFED",
+    },
+    buttonStyle: {
+      backgroundColor: "#5DFFED",
+      color: "#18171B",
+    },
   };
+
+  const {
+    openToast,
+    setOpenToast,
+    toastContent,
+    setToastContent,
+    severity,
+    setSeverity,
+  } = useContext(ToastContext);
 
   useEffect(() => {
     axios
@@ -62,12 +87,27 @@ export default function Invest(props) {
     const reqBody = {
       newInvestment: investDetails,
     };
-    axios.post("/api/createInvestment", reqBody).then((response) => {
-      console.log(response);
-    });
+    axios
+      .post("/api/createInvestment", reqBody)
+      .then((response) => {
+        setOpenToast(true);
+        setSeverity("success");
+        setToastContent(response.data.message);
+        props.closeInvestModal(true);
+      })
+      .catch((err) => {
+        setOpenToast(true);
+        setSeverity("error");
+        setToastContent(err.response.data.message);
+        props.closeInvestModal();
+      });
   };
   return (
-    <Dialog open={props.openInvestModal} onClose={props.closeInvestModal}>
+    <Dialog
+      open={props.openInvestModal}
+      onClose={props.closeInvestModal}
+      PaperProps={{ style: styles.dialogStyle }}
+    >
       <DialogTitle>Invest</DialogTitle>
       <DialogContent>
         <Box>
@@ -79,6 +119,13 @@ export default function Invest(props) {
             value={investDetails.count}
             type="number"
             onChange={(e) => handleChange(e, "count")}
+            sx={{
+              fieldset: styles.textfieldStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
+            }}
           />
           <TextField
             required
@@ -87,12 +134,29 @@ export default function Invest(props) {
             style={styles.textField}
             value={investDetails.comment}
             onChange={(e) => handleChange(e, "comment")}
+            sx={{
+              fieldset: styles.textfieldStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
+            }}
           />
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button disabled={isAcceptDisabled} onClick={createInvestment}>Invest</Button>
-        <Button onClick={props.closeInvestModal}>Close</Button>
+        {!isAcceptDisabled && (
+          <Button
+            style={styles.buttonStyle}
+            disabled={isAcceptDisabled}
+            onClick={createInvestment}
+          >
+            Invest
+          </Button>
+        )}
+        <Button style={styles.buttonStyle} onClick={props.closeInvestModal}>
+          Close
+        </Button>
       </DialogActions>
     </Dialog>
   );

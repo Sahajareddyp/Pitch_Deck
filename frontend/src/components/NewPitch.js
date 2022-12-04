@@ -42,6 +42,18 @@ export default function NewPitch(props) {
       marginLeft: "10px",
       width: "90%",
     },
+    dialogStyle: {
+      backgroundColor: "#18171B",
+      borderColor: "#5DFFED",
+      color: "#5DFFED",
+    },
+    textfieldColor: {
+      color: "#5DFFED",
+    },
+    buttonStyle: {
+      backgroundColor: "#5DFFED",
+      color: "#18171B",
+    },
   };
   const [pitchValidation, setpitchValidation] = useState({
     idea_nameValid: true,
@@ -62,7 +74,7 @@ export default function NewPitch(props) {
     planError: "",
     progressValid: true,
     progressError: "",
-    categoriesValid:true,
+    categoriesValid: true,
     categoriesError: "",
   });
 
@@ -101,10 +113,14 @@ export default function NewPitch(props) {
     const idea_nameError = idea_nameValid ? "" : "This field is required.";
 
     const short_descriptionValid = newPitch.short_description.trim() !== "";
-    const short_descriptionError = short_descriptionValid ? "" : "This field is required.";
+    const short_descriptionError = short_descriptionValid
+      ? ""
+      : "This field is required.";
 
     const long_descriptionValid = newPitch.long_description.trim() !== "";
-    const long_descriptionError = long_descriptionValid ? "" : "This field is required.";
+    const long_descriptionError = long_descriptionValid
+      ? ""
+      : "This field is required.";
 
     // const pptValid = newPitch.ppt.trim() !== "";
     // const pptError = pptValid ? "" : "This field is required.";
@@ -113,7 +129,9 @@ export default function NewPitch(props) {
     // const videoError = videoValid ? "" : "This field is required.";
 
     const company_valuationValid = newPitch.company_valuation > 0;
-    const company_valuationError = company_valuationValid ? "" : "This field is required.";
+    const company_valuationError = company_valuationValid
+      ? ""
+      : "This field is required.";
     console.log(newPitch.equity);
     const equityValid = newPitch.equity > 0;
     const equityError = equityValid ? "" : "This field is required.";
@@ -162,21 +180,21 @@ export default function NewPitch(props) {
       // categoriesValid
     );
   };
-  const onCreateClick = () => { 
-    if(validateForm()){
-    const reqBody = {
-      newPitch: newPitch,
-      userId: loggedInUser.id,
-    };
-    axios
-      .post("/api/createNewPitch", reqBody)
-      .then((response) => {
-        console.log(response);
-        props.closeNewPitchModal(null, true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const onCreateClick = () => {
+    if (validateForm()) {
+      const reqBody = {
+        newPitch: newPitch,
+        userId: loggedInUser.id,
+      };
+      axios
+        .post("/api/createNewPitch", reqBody)
+        .then((response) => {
+          console.log(response);
+          props.closeNewPitchModal(null, true);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -192,7 +210,7 @@ export default function NewPitch(props) {
       plan: "",
       progress: "",
       categories: "",
-    })
+    });
     setpitchValidation({
       idea_nameValid: true,
       idea_nameError: "",
@@ -212,13 +230,17 @@ export default function NewPitch(props) {
       planError: "",
       progressValid: true,
       progressError: "",
-      categoriesValid:true,
+      categoriesValid: true,
       categoriesError: "",
-    })
+    });
     props.closeNewPitchModal();
-  }
+  };
   return (
-    <Dialog open={props.openNewPitch} onClose={onClose}>
+    <Dialog
+      open={props.openNewPitch}
+      onClose={onClose}
+      PaperProps={{ style: styles.dialogStyle }}
+    >
       <DialogTitle>Propose New Pitch</DialogTitle>
       <DialogContent>
         <Box>
@@ -233,6 +255,10 @@ export default function NewPitch(props) {
               fieldset: pitchValidation.idea_nameValid
                 ? styles.textfieldStyle
                 : styles.errorStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
             }}
           />
           {!pitchValidation.idea_nameValid && (
@@ -249,12 +275,18 @@ export default function NewPitch(props) {
               fieldset: pitchValidation.short_descriptionValid
                 ? styles.textfieldStyle
                 : styles.errorStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
             }}
           />
           {!pitchValidation.short_descriptionValid && (
-            <p style={styles.errorText}>{pitchValidation.short_descriptionError}</p>
+            <p style={styles.errorText}>
+              {pitchValidation.short_descriptionError}
+            </p>
           )}
-        
+
           <TextField
             required
             id="outlined-required"
@@ -266,10 +298,16 @@ export default function NewPitch(props) {
               fieldset: pitchValidation.long_descriptionValid
                 ? styles.textfieldStyle
                 : styles.errorStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
             }}
           />
           {!pitchValidation.long_descriptionValid && (
-            <p style={styles.errorText}>{pitchValidation.long_descriptionError}</p>
+            <p style={styles.errorText}>
+              {pitchValidation.long_descriptionError}
+            </p>
           )}
           <TextField
             required
@@ -283,10 +321,16 @@ export default function NewPitch(props) {
               fieldset: pitchValidation.company_valuationValid
                 ? styles.textfieldStyle
                 : styles.errorStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
             }}
           />
           {!pitchValidation.company_valuationValid && (
-            <p style={styles.errorText}>{pitchValidation.company_valuationError}</p>
+            <p style={styles.errorText}>
+              {pitchValidation.company_valuationError}
+            </p>
           )}
           <TextField
             required
@@ -300,6 +344,10 @@ export default function NewPitch(props) {
               fieldset: pitchValidation.equityValid
                 ? styles.textfieldStyle
                 : styles.errorStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
             }}
           />
           {!pitchValidation.equityValid && (
@@ -316,11 +364,15 @@ export default function NewPitch(props) {
               fieldset: pitchValidation.progressValid
                 ? styles.textfieldStyle
                 : styles.errorStyle,
+              input: styles.textfieldColor,
             }}
-            />
-            {!pitchValidation.progressValid && (
-              <p style={styles.errorText}>{pitchValidation.progressError}</p>
-            )}
+            InputLabelProps={{
+              style: styles.textfieldColor,
+            }}
+          />
+          {!pitchValidation.progressValid && (
+            <p style={styles.errorText}>{pitchValidation.progressError}</p>
+          )}
           <TextField
             required
             id="outlined-required"
@@ -332,17 +384,20 @@ export default function NewPitch(props) {
               fieldset: pitchValidation.planValid
                 ? styles.textfieldStyle
                 : styles.errorStyle,
+              input: styles.textfieldColor,
+            }}
+            InputLabelProps={{
+              style: styles.textfieldColor,
             }}
           />
           {!pitchValidation.planValid && (
             <p style={styles.errorText}>{pitchValidation.planError}</p>
           )}
-
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={onCreateClick}>Create</Button>
+        <Button style={styles.buttonStyle} onClick={onClose}>Cancel</Button>
+        <Button style={styles.buttonStyle}  onClick={onCreateClick}>Create</Button>
       </DialogActions>
     </Dialog>
   );

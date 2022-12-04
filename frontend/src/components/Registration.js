@@ -145,8 +145,8 @@ export default function Registration(props) {
     const companyValid = newUser.company.trim() !== "";
     const companyError = companyValid ? "" : "This field is required.";
 
-    const passwordValid = newUser.password.trim() !== "";
-    const passwordError = passwordValid ? "" : "This field is required.";
+    const passwordValid = newUser.password.trim() .length >= 6;
+    const passwordError = passwordValid ? "" : "THe password should have atleast 6 characters.";
 
     const confirmPasswordValid =
       newUser.confirmPassword.trim() === newUser.password.trim();
@@ -230,6 +230,7 @@ export default function Registration(props) {
       open={props.openRegistration}
       onClose={closeDialog}
       PaperProps={{ style: styles.dialogStyle }}
+      fullWidth
     >
       <DialogTitle>Sign Up</DialogTitle>
       <DialogContent>

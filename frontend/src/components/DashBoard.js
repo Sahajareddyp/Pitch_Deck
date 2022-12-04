@@ -122,7 +122,8 @@ export default function Dashboard() {
     axios
       .get(`/api/getPitchByUser/${userId}`)
       .then((response) => {
-        setAllPitch(response.data.data);
+        setAllPitch(response.data.pitches);
+        setInvestedPitch(response.data.fullfilledData);
       })
       .catch((err) => {
         console.log(err);
@@ -178,8 +179,18 @@ export default function Dashboard() {
           TabIndicatorProps={{ style: { background: "#5DFFED" } }}
         >
           <Tab label="All Pitch" {...a11yProps(0)} style={styles.tab} />
-          {loggedInUser.roleid != 2 && (
-            <Tab label="Invested Pitch" {...a11yProps(1)} style={styles.tab} />
+          {loggedInUser.roleid != 2 ? (
+            <Tab
+              label="Interested Pitch"
+              {...a11yProps(1)}
+              style={styles.tab}
+            />
+          ) : (
+            <Tab
+              label="FullFilled Pitch"
+              {...a11yProps(1)}
+              style={styles.tab}
+            />
           )}
           {loggedInUser.roleid != 2 && (
             <Tab

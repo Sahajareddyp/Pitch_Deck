@@ -257,6 +257,30 @@ export default function PitchDetails(props) {
                 &nbsp;
                 <Typography>{pitch.plan}</Typography>
               </div>
+              {pitch.investor && <div>
+                <h4>Investor Details:</h4>
+                <div style={styles.textStyle}>
+                <Typography sx={{ fontWeight: "bold" }}>
+                  Name:{" "}
+                </Typography>
+                &nbsp;
+                <Typography>{`${pitch.investor[0].firstName} ${pitch.investor[0].lastName}`}</Typography>
+              </div>
+              <div style={styles.textStyle}>
+                <Typography sx={{ fontWeight: "bold" }}>
+                  Company:{" "}
+                </Typography>
+                &nbsp;
+                <Typography>{`${pitch.investor[0].company}`}</Typography>
+              </div>
+              <div style={styles.textStyle}>
+                <Typography sx={{ fontWeight: "bold" }}>
+                  Email:{" "}
+                </Typography>
+                &nbsp;
+                <Typography>{`${pitch.investor[0].email}`}</Typography>
+              </div>
+                </div>}
             </>
           )}
         </DialogContent>

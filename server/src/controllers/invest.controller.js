@@ -41,6 +41,7 @@ const createInvestment = async (req, res) => {
 
   if (investment.error) {
     console.log(investment.error);
+    console.log("Here");
     res
       .status(400)
       .send({message: "There was some issue with the server. Please try again later"});

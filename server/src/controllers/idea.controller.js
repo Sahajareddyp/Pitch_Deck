@@ -44,6 +44,7 @@ const getAllPitch = async (req, res) => {
 
     let { data: invest, error } = await supabase.from("invest").select("*");
     if (error) {
+      console.log(error);
       res
         .status(500)
         .send({ message: "Could not fetch Data. Please try again later" });

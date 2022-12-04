@@ -141,6 +141,8 @@ export default function Login() {
   return (
     <Box style={styles.box}>
       <Container style={styles.container} maxWidth="sm">
+      <img src={require('../assets/images/logo-no-background.png')} width="60%" height="60%" />
+      <br/><br/><br/>
         <TextField
           required
           id="outlined-required"

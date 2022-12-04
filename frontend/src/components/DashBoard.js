@@ -21,19 +21,34 @@ import PropTypes from "prop-types";
 export default function Dashboard() {
   const styles = {
     containerStyle: {
-      border: "1px solid blue",
+      border: "1px solid #5DFFED",
       margin: "10px",
+      height: "75vh"
     },
     cardStyle: {
       margin: "10px",
-      border: "1px solid blue",
+      border: "1px solid #5DFFED",
+      backgroundColor: "#18171B",
+      color: "#5DFFED",
+      height: "200px",
+      width: "400px",
+      textAlign: "center",
     },
     cardContianerStyle: {
       display: "flex",
       justifyContext: "space-between",
     },
+    tab: {
+      color: "#5DFFED",
+      ".Mui-selected": {
+        color: "red",
+      },
+    },
+    button: {
+      color: "#18171B",
+      backgroundColor: "#5DFFED",
+    }
   };
-
   const {
     email,
     setEmail,
@@ -89,8 +104,8 @@ export default function Dashboard() {
       .then((response) => {
         console.log(response);
         setAllPitch(response.data.data.allPitch);
-        setInvestedPitch(response.data.data.investedPitch)
-        setFullFilledPitch(response.data.data.fullFilledPitch)
+        setInvestedPitch(response.data.data.investedPitch);
+        setFullFilledPitch(response.data.data.fullFilledPitch);
       })
       .catch((err) => {
         console.log(err);
@@ -135,19 +150,24 @@ export default function Dashboard() {
   return (
     <Box>
       <NavigationBar />
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box sx={{ borderBottom: 0, borderColor: "#5DFFED" }}>
         <Tabs
           value={value}
           onChange={handleTabChange}
           aria-label="basic tabs example"
+          TabIndicatorProps={{style: {background:'#5DFFED'}}}
         >
-          <Tab label="All Pitch" {...a11yProps(0)} />
-          <Tab label="Invested Pitch" {...a11yProps(1)} />
-          <Tab label="FullFilled Pitch" {...a11yProps(2)} />
+          <Tab label="All Pitch" {...a11yProps(0)} style={styles.tab} />
+          {loggedInUser.roleid != 2 && <Tab label="Invested Pitch" {...a11yProps(1)} style={styles.tab} />}
+          {loggedInUser.roleid != 2 && <Tab
+            label="FullFilled Pitch"
+            {...a11yProps(2)}
+            style={styles.tab}
+          />}
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <Container maxWidth="lg" style={styles.containerStyle}>
+        <Container maxWidth style={styles.containerStyle}>
           {loggedInUser.roleid != 3 && (
             <Button
               style={{ float: "right", margin: "5px" }}
@@ -157,7 +177,7 @@ export default function Dashboard() {
               Create Pitch
             </Button>
           )}
-          <Container maxWidth="lg" style={styles.cardContianerStyle}>
+          <Container maxWidth style={styles.cardContianerStyle}>
             {allPitch.map((pitch) => {
               return (
                 <Card
@@ -168,7 +188,6 @@ export default function Dashboard() {
                   <CardContent>
                     <Typography
                       sx={{ fontSize: 14 }}
-                      color="text.secondary"
                       gutterBottom
                     >
                       {pitch.idea_name}
@@ -178,11 +197,12 @@ export default function Dashboard() {
                       {pitch.short_description}
                     </Typography>
                   </CardContent>
-                  <CardActions>
+                  <CardActions style={{justifyContent: "center"}}>
                     <Button
                       size="small"
                       variant="contained"
                       onClick={(e) => openPitchDetailModal(pitch)}
+                      style={styles.button}
                     >
                       Learn More
                     </Button>
@@ -194,8 +214,8 @@ export default function Dashboard() {
         </Container>
       </TabPanel>
       <TabPanel value={value} index={1}>
-      <Container maxWidth="lg" style={styles.containerStyle}>
-          <Container maxWidth="lg" style={styles.cardContianerStyle}>
+        <Container maxWidth style={styles.containerStyle}>
+          <Container maxWidth style={styles.cardContianerStyle}>
             {investedPitch.map((pitch) => {
               return (
                 <Card
@@ -206,7 +226,6 @@ export default function Dashboard() {
                   <CardContent>
                     <Typography
                       sx={{ fontSize: 14 }}
-                      color="text.secondary"
                       gutterBottom
                     >
                       {pitch.idea_name}
@@ -216,11 +235,12 @@ export default function Dashboard() {
                       {pitch.short_description}
                     </Typography>
                   </CardContent>
-                  <CardActions>
+                  <CardActions style={{justifyContent: "center"}}>
                     <Button
                       size="small"
                       variant="contained"
                       onClick={(e) => openPitchDetailModal(pitch)}
+                      style={styles.button}
                     >
                       Learn More
                     </Button>
@@ -232,8 +252,8 @@ export default function Dashboard() {
         </Container>
       </TabPanel>
       <TabPanel value={value} index={2}>
-      <Container maxWidth="lg" style={styles.containerStyle}>
-          <Container maxWidth="lg" style={styles.cardContianerStyle}>
+        <Container maxWidth style={styles.containerStyle}>
+          <Container maxWidth style={styles.cardContianerStyle}>
             {fullFilledPitch.map((pitch) => {
               return (
                 <Card
@@ -244,7 +264,6 @@ export default function Dashboard() {
                   <CardContent>
                     <Typography
                       sx={{ fontSize: 14 }}
-                      color="text.secondary"
                       gutterBottom
                     >
                       {pitch.idea_name}
@@ -254,11 +273,12 @@ export default function Dashboard() {
                       {pitch.short_description}
                     </Typography>
                   </CardContent>
-                  <CardActions>
+                  <CardActions style={{justifyContent: "center"}}>
                     <Button
                       size="small"
                       variant="contained"
                       onClick={(e) => openPitchDetailModal(pitch)}
+                      style={styles.button}
                     >
                       Learn More
                     </Button>

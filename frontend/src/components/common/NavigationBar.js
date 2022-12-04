@@ -29,6 +29,16 @@ export default function NavigationBar() {
     setSeverity,
   } = useContext(ToastContext);
 
+  const styles = {
+    navBar: {
+      backgroundColor: "#18171B",
+      color: "#5DFFED"
+    },
+    textColor: {
+      color: "#5DFFED"
+    }
+  }
+
   const navigate = useNavigate();
   const handleLogout = () => {
     axios
@@ -54,8 +64,8 @@ export default function NavigationBar() {
   };
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
+      <AppBar position="static" style={styles.navBar}>
+        <Toolbar style={{display: "flex", justifyContent: "space-between"}}>
           <IconButton
             size="large"
             edge="start"
@@ -63,9 +73,10 @@ export default function NavigationBar() {
             aria-label="menu"
             sx={{ mr: 2 }}
           ></IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          {/* <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: "#5DFFED" }} style={styles.textColor}>
             Pitch Deck
-          </Typography>
+          </Typography> */}
+          <img src={require('../../assets/images/logo-no-background.png')} width="20%" height="20%" />
           {!session ? (
             <Button color="inherit" onClick={handleLogin}>
               Login

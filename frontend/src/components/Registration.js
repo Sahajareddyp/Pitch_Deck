@@ -17,6 +17,7 @@ import axios from "axios";
 import { ToastContext } from "../contexts/ToastContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { styled } from "@mui/system";
 
 export default function Registration(props) {
   const [newUser, setNewUser] = React.useState({
@@ -45,6 +46,22 @@ export default function Registration(props) {
   });
 
   const [rolesList, setRolesList] = React.useState(roles);
+
+  const CustomSelect = styled(Select)(() => ({
+    width: 300,
+    "&.MuiOutlinedInput-root": {
+      "& fieldset": {
+        borderColor: "red"
+      },
+      "&:hover fieldset": {
+        borderColor: "yellow"
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "green"
+      }
+    }
+  }));
+
   const styles = {
     textField: {
       margin: "10px",
@@ -57,9 +74,10 @@ export default function Registration(props) {
       borderColor: "#5DFFED",
     },
     errorText: {
-      // color: "red",
-      // marginTop: "0px",
-      // marginLeft: "10px",
+      color: "red",
+      marginTop: "0px",
+      marginLeft: "10px",
+      width: "90%",
     },
     dialogStyle: {
       backgroundColor: "#18171B",
@@ -74,6 +92,30 @@ export default function Registration(props) {
       color: "#5DFFED",
       margin: "0px"
     },
+    select: {
+      '.MuiOutlinedInput-notchedOutline': {
+        borderColor: '#5DFFED',
+        color: "#5DFFED"
+      },
+      '&:hover .MuiOutlinedInput-notchedOutline': {
+        borderColor: '#5DFFED',
+        borderWidth: '0.15rem',
+      },
+      '.MuiSvgIcon-root': {
+        color: "#5DFFED"
+      },
+      '.MuiList-padding': {
+        padding: "0px"
+      },
+      '.MuiSelect-nativeInput': {
+        color: "#5DFFED"
+      },
+      color: "#5DFFED"
+    },
+    buttonStyle: {
+      borderColor: "#5DFFED",
+      color: "#5DFFED"
+    }
   };
   const navigate = useNavigate();
 
@@ -264,6 +306,9 @@ export default function Registration(props) {
                 ? styles.textfieldStyle
                 : styles.errorStyle,
               input: styles.textfieldColor,
+              '&:hover': {
+                color: "#5DFFED",
+              }
             }}
             InputLabelProps={{
               style: styles.textfieldColor,
@@ -280,17 +325,22 @@ export default function Registration(props) {
               Role
             </InputLabel>
             <Select
+                
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="Role"
               value={newUser.roleid}
               onChange={(e) => handleChange(e, "roleid")}
-              sx={{
-                fieldset: userValidation.companyValid
-                  ? styles.textfieldStyle
-                  : styles.errorStyle,
-                input: styles.textfieldColor,
-              }}
+              sx={styles.select}
+              // sx={{
+              //   fieldset: styles.textfieldStyle,
+              //   root: styles.textfieldColor,
+              //   icon: styles.textfieldColor,
+              //   color: "#5DFFED",
+              //   '&:hover': {
+              //     color: "#5DFFED",
+              //   }
+              // }}
             >
               {rolesList.map((role) => (
                 <MenuItem
@@ -350,8 +400,8 @@ export default function Registration(props) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeDialog}>Cancel</Button>
-        <Button onClick={onSignUpClick}>Sign Up</Button>
+        <Button style={styles.buttonStyle} variant="outlined" onClick={closeDialog}>Cancel</Button>
+        <Button style={styles.buttonStyle} variant="outlined" onClick={onSignUpClick}>Sign Up</Button>
       </DialogActions>
     </Dialog>
   );

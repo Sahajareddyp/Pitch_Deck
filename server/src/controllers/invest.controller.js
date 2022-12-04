@@ -43,10 +43,10 @@ const createInvestment = async (req, res) => {
     console.log(investment.error);
     res
       .status(400)
-      .send("There was some issue with the server. Please try again later");
+      .send({message: "There was some issue with the server. Please try again later"});
   } else {
     checkCriteria(req.body.newInvestment.ideaId.toString());
-    res.status(200).send("Successfully added the investment");
+    res.status(200).send({message: "Successfully added the investment"});
   }
 };
 

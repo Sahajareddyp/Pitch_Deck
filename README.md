@@ -101,6 +101,28 @@ decrypt it only when desired condition is met.<br>
 
 ![](Images/img_5.png)
 
+6. Condition is met: Required number of Investors are onboard.
+
+![](Images/img_8.png)
+
+This is the view of the pitcher where he can see the details of the Investor.
+
+![](Images/img_7.png)
+
+
+![](Images/img_10.png)
+
+7. View of the Investor once the required number of Investors are onboard
+
+![](Images/img_11.png)
 
 ***Note:*** 
-View Investment Button: Only for Development purpose, it won't be shown to the end Suser when released.
+View Investment Button: Only for Development purpose, it won't be shown to the end user when released.
+
+Interested Ideas contain the data which is encrypted when investor is onboard to invest and fills the Invest dialog box
+
+![](Images/img_13.png)
+
+Fulfilled Ideas contain the decrypted data of the investment that met the Investor condition.
+
+![](Images/img_12.png)

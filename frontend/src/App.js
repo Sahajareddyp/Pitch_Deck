@@ -8,6 +8,7 @@ import Toast from "./components/common/Toast";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./components/DashBoard";
 import PasswordRecovery from "./components/PasswordRecovery";
+import View from "./components/View";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Router>
             <Routes>
               <Route>
+                <Route exact path="/view" element={<View />}/>
               <Route exact path="/passwordRecovery" element={<PasswordRecovery />} />
                 <Route exact path="/login" element={<Login />} />
                 <Route path="/" element={<Dashboard />} />

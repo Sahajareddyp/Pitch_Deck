@@ -160,4 +160,22 @@ const checkCriteria = async (ideaId) => {
   }
 };
 
-module.exports = { createInvestment, getInvestementDetails };
+const getInterestAndFullFilled = async (req, res) => {
+  let { data: interest, investError } = await supabase
+    .from("invest")
+    .select("*");
+
+  let { data: fullfilled, fullFilledError } = await supabase
+    .from("FullfilledInvestment")
+    .select("*");
+
+  res
+    .status(200)
+    .send({ message: "Successfully Pulled data", fullfilled, interest });
+};
+
+module.exports = {
+  createInvestment,
+  getInvestementDetails,
+  getInterestAndFullFilled,
+};

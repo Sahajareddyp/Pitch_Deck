@@ -10,7 +10,7 @@ const loginUser = async (req, res) => {
   console.log("Signed IN");
   console.log(user);
   console.log(user.error);
-  console.log("Signed IN Done");
+  // console.log("Signed IN Done");
   if (user.error) {
     res.status(500).send({ message: "Invalid Email/Password" });
   } else {
